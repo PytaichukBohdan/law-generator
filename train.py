@@ -16,8 +16,8 @@ from load_dataset import load_dataset, Sampler
 from accumulate import AccumulatingOptimizer
 import memory_saving_gradients
 
-CHECKPOINT_DIR = 'checkpoint'
-SAMPLE_DIR = 'samples'
+CHECKPOINT_DIR = '/datasets/checkpoint'
+SAMPLE_DIR = '/datasets/samples'
 
 
 parser = argparse.ArgumentParser(
@@ -28,7 +28,7 @@ parser.add_argument('--dataset', metavar='PATH', type=str, required=True, help='
 parser.add_argument('--model_name', metavar='MODEL', type=str, default='345M', help='Pretrained model name')
 parser.add_argument('--combine', metavar='CHARS', type=int, default=50000, help='Concatenate input files with <|endoftext|> separator into chunks of this minimum size')
 
-parser.add_argument('--batch_size', metavar='SIZE', type=int, default=1, help='Batch size')
+parser.add_argument('--batch_size', metavar='SIZE', type=int, default=2, help='Batch size')
 parser.add_argument('--learning_rate', metavar='LR', type=float, default=0.00002, help='Learning rate for Adam')
 parser.add_argument('--accumulate_gradients', metavar='N', type=int, default=1, help='Accumulate gradients across N minibatches.')
 parser.add_argument('--memory_saving_gradients', default=False, action='store_true', help='Use gradient checkpointing to reduce vram usage.')
