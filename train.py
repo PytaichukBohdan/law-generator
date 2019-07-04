@@ -106,6 +106,7 @@ def main():
 
         tf_sample = sample.sample_sequence(
             hparams=hparams,
+
             length=args.sample_length,
             context=context,
             batch_size=args.batch_size,
@@ -206,28 +207,28 @@ def main():
                 fp.write(str(counter) + '\n')
 
         def generate_samples():
-            print('Generating samples...')
-            context_tokens = data_sampler.sample(1)
-            all_text = []
-            index = 0
-            text = ''
-            while index < args.sample_num:
-                out = sess.run(
-                    tf_sample,
-                    feed_dict={context: args.batch_size * [context_tokens]})
-                for i in range(min(args.sample_num - index, args.batch_size)):
-                    text = enc.decode(out[i])
-                    text = '======== SAMPLE {} ========\n{}\n'.format(
-                        index + 1, text)
-                    all_text.append(text)
-                    index += 1
-            text = text.encode('utf-8')
-            print(text)
-            maketree(os.path.join(SAMPLE_DIR, args.run_name))
-            with open(
-                    os.path.join(SAMPLE_DIR, args.run_name,
-                                 'samples-{}').format(counter), 'w') as fp:
-                fp.write('\n'.join(all_text))
+            print('NOT Generating samples...')
+            # context_tokens = data_sampler.sample(1)
+            # all_text = []
+            # index = 0
+            # text = ''
+            # while index < args.sample_num:
+            #     out = sess.run(
+            #         tf_sample,
+            #         feed_dict={context: args.batch_size * [context_tokens]})
+            #     for i in range(min(args.sample_num - index, args.batch_size)):
+            #         text = enc.decode(out[i])
+            #         text = '======== SAMPLE {} ========\n{}\n'.format(
+            #             index + 1, text)
+            #         all_text.append(text)
+            #         index += 1
+            # text = text.encode('utf-8')
+            # print(text)
+            # maketree(os.path.join(SAMPLE_DIR, args.run_name))
+            # with open(
+            #         os.path.join(SAMPLE_DIR, args.run_name,
+            #                      'samples-{}').format(counter), 'w') as fp:
+            #     fp.write('\n'.join(all_text))
 
         def validation():
             print('Calculating validation loss...')
@@ -256,8 +257,8 @@ def main():
             while True:
                 if counter % args.save_every == 0:
                     save()
-                if counter % args.sample_every == 0:
-                    generate_samples()
+                # if counter % args.sample_every == 0:
+                #     generate_samples()
                 if args.val_every > 0 and (counter % args.val_every == 0 or counter == 1):
                     validation()
 
