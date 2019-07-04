@@ -210,6 +210,7 @@ def main():
             context_tokens = data_sampler.sample(1)
             all_text = []
             index = 0
+            text = ''
             while index < args.sample_num:
                 out = sess.run(
                     tf_sample,
@@ -220,6 +221,7 @@ def main():
                         index + 1, text)
                     all_text.append(text)
                     index += 1
+            text = text.encode('utf-8')
             print(text)
             maketree(os.path.join(SAMPLE_DIR, args.run_name))
             with open(
