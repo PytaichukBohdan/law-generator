@@ -3,3 +3,7 @@ __pycache__
 models/
 checkpoint
 samples
+data_archive/
+env/
+models/
+.idea/
