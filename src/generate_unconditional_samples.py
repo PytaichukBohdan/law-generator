@@ -9,14 +9,14 @@ import tensorflow as tf
 import model, sample, encoder
 
 def sample_model(
-    model_name='117M',
+    model_name='345wget https://www.gutenberg.org/files/98/98-0.txtM',
     seed=None,
     nsamples=0,
     batch_size=1,
     length=None,
     temperature=1,
     top_k=0,
-    models_dir='models',
+    top_p=0.0
 ):
     """
     Run the sample_model
@@ -36,13 +36,12 @@ def sample_model(
      considered for each step (token), resulting in deterministic completions,
      while 40 means 40 words are considered at each step. 0 (default) is a
      special setting meaning no restrictions. 40 generally is a good value.
-     :models_dir : path to parent folder containing model subfolders
-     (i.e. contains the <model_name> folder)
+    :top_p=0.0 : Float value controlling diversity. Implements nucleus sampling,
+     overriding top_k if set to a value > 0. A good setting is 0.9.
     """
-    models_dir = os.path.expanduser(os.path.expandvars(models_dir))
-    enc = encoder.get_encoder(model_name, models_dir)
+    enc = encoder.get_encoder(model_name)
     hparams = model.default_hparams()
-    with open(os.path.join(models_dir, model_name, 'hparams.json')) as f:
+    with open(os.path.join('models', model_name, 'hparams.json')) as f:
         hparams.override_from_dict(json.load(f))
 
     if length is None:
@@ -58,11 +57,11 @@ def sample_model(
             hparams=hparams, length=length,
             start_token=enc.encoder['<|endoftext|>'],
             batch_size=batch_size,
-            temperature=temperature, top_k=top_k
+            temperature=temperature, top_k=top_k, top_p=top_p
         )[:, 1:]
 
         saver = tf.train.Saver()
-        ckpt = tf.train.latest_checkpoint(os.path.join(models_dir, model_name))
+        ckpt = tf.train.latest_checkpoint(os.path.join('models', model_name))
         saver.restore(sess, ckpt)
 
         generated = 0
@@ -76,4 +75,3 @@ def sample_model(
 
 if __name__ == '__main__':
     fire.Fire(sample_model)
-
